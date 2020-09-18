@@ -22,6 +22,19 @@ canvas.addEventListener('mouseup', function(){
   clickedY = 0;
   console.log("zeroed");
 })
+canvas.addEventListener('touchstart',
+  function(e){
+    clickedX = e.clientX;
+    clickedY = e.clientY;
+    mouseDraw = true;
+    console.log("CLICKED " + e.clientX + " " + e.clientY);
+  })
+canvas.addEventListener('touchend', function(){
+  mouseDraw = false;
+  clickedX = 0;
+  clickedY = 0;
+  console.log("zeroed");
+})
 
 
 
