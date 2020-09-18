@@ -1,0 +1,16 @@
+body {
+    font-size: 15pt;
+}
+#console{
+  color: blue;
+}
+#canvas1{
+  position: auto;
+  top: 5;
+  left: 5;
+  right: 5;
+  bottom: 5;
+  width: 350px;
+  height: 350px;
+  background-color: purple;
+}
