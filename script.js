@@ -4,6 +4,26 @@ const ctx = canvas.getContext("2d");
 ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 let particleArray;
+let mouseDraw = false;
+let clickedX;
+let clickedY;
+let paintedBall = 0;
+//click to destroy INPUT
+canvas.addEventListener('mousedown',
+  function(e){
+    clickedX = e.clientX;
+    clickedY = e.clientY;
+    mouseDraw = true;
+    console.log("CLICKED " + e.clientX + " " + e.clientY);
+  })
+canvas.addEventListener('mouseup', function(){
+  mouseDraw = false;
+  clickedX = 0;
+  clickedY = 0;
+  console.log("zeroed");
+})
+
+
 
 // Particle Constructor function
 function Particle(x, y, directionX, directionY, size, color){
@@ -13,6 +33,7 @@ function Particle(x, y, directionX, directionY, size, color){
   this.directionY = directionY;
   this.size = size;
   this.color = color;
+  this.isDead = false;
 
 }
 
@@ -25,6 +46,7 @@ Particle.prototype.draw = function(){
 }
 //add update method to particle prototype
 Particle.prototype.update = function() {
+  if(this.isDead){return;}
   if(this.x + this.size > canvas.width || this.x - this.size < 0){
     this.directionX = -this.directionY;
   }
@@ -41,7 +63,7 @@ Particle.prototype.update = function() {
 function init(){
   particleArray = [];
   for (var i = 0; i < 100; i++) {
-  let size = Math.random() * 20;
+  let size = Math.random() * 50;
   let x = Math.random() * (innerWidth - size * 2);
   let y = Math.random() * (innerHeight - size * 2) ;
   let directionX = (Math.random() * .4 ) - .2;
@@ -49,6 +71,7 @@ function init(){
   let color = 'white';
 
   particleArray.push(new Particle(x, y, directionX, directionY, size, color));
+
   }
 
 }
@@ -57,10 +80,24 @@ function init(){
 function animate(){
   requestAnimationFrame(animate);
   ctx.clearRect(0,0,innerWidth, innerHeight);
-
+  paintedBall = 0;
   for (let i=0; i<particleArray.length; i++){
+    if(mouseDraw){
+        if((clickedX + 50 >= particleArray[i].x) &&
+           (clickedX - 50 <= particleArray[i].x) &&
+           (clickedY + 50 >= particleArray[i].y) &&
+           (clickedY - 50 <= particleArray[i].y)) {
+             particleArray[i].color = 'red';
+
+        }
+    }
+
+    if(particleArray[i].color == 'red') {paintedBall += 1};
     particleArray[i].update();
   }
+  ctx.font = "100px Verdana";
+  ctx.fillStyle = 'blue';
+  ctx.fillText(paintedBall, 100, 100);
 }
 
 //Global Function Call
@@ -73,5 +110,6 @@ window.addEventListener('resize',
   function(){
     canvas.width = innerWidth;
     canvas.height = innerHeight;
+    // mouseClick = 0;
     init();
   })
