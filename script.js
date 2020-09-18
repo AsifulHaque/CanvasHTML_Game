@@ -66,3 +66,12 @@ function animate(){
 //Global Function Call
 init();
 animate();
+
+
+//Window resize fix
+window.addEventListener('resize',
+  function(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    init();
+  })
